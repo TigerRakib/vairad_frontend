@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
 * {
   margin: 0;
   padding: 0;
@@ -13,11 +15,11 @@ html {
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #F7F8FC;
+  color: #1F2937;
 }
 
 code {
@@ -26,19 +28,27 @@ code {
 
 @layer components {
   .btn {
-    @apply px-4 py-2 rounded-lg font-medium transition-all duration-200 inline-flex items-center justify-center;
+    @apply px-4 py-2 rounded-button font-medium transition-all duration-200 inline-flex items-center justify-center;
   }
 
   .btn-primary {
-    @apply bg-blue-500 hover:bg-blue-600 text-white shadow-md hover:shadow-lg;
+    @apply bg-primary hover:bg-primary-hover text-white shadow-sm hover:shadow-md;
   }
 
   .btn-secondary {
-    @apply bg-gray-200 hover:bg-gray-300 text-gray-800 shadow-sm;
+    @apply bg-surface-bg hover:bg-slate-200 text-text-secondary border border-border;
   }
 
   .btn-danger {
-    @apply bg-red-500 hover:bg-red-600 text-white shadow-md;
+    @apply bg-danger hover:bg-red-600 text-white shadow-sm;
+  }
+
+  .btn-outline {
+    @apply border border-border hover:bg-slate-50 text-text-secondary bg-white;
+  }
+
+  .btn-danger-outline {
+    @apply border border-danger text-danger hover:bg-red-50 bg-white;
   }
 
   .btn-small {
@@ -46,41 +56,73 @@ code {
   }
 
   .card {
-    @apply bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200;
+    @apply bg-white rounded-card shadow-card border border-border;
   }
 
   .input {
-    @apply w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all;
+    @apply w-full px-4 py-2.5 rounded-input border border-border bg-white text-text-primary placeholder-slate-400 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all text-sm;
   }
 
   .modal-overlay {
-    @apply fixed inset-0 bg-black/50 flex items-center justify-center z-50;
+    @apply fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4;
   }
 
   .modal-content {
-    @apply bg-white rounded-lg shadow-2xl max-w-md w-full mx-4 p-6;
+    @apply bg-white rounded-modal shadow-2xl w-full p-6 max-h-[90vh] overflow-y-auto;
+    max-width: 28rem;
   }
 
   .badge {
     @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
   }
+
+  .sidebar-item {
+    @apply flex items-center gap-3 px-4 py-2.5 rounded-button text-sm font-medium transition-all duration-200 cursor-pointer;
+  }
+
+  .sidebar-item-active {
+    @apply bg-primary text-white shadow-sm;
+  }
+
+  .sidebar-item-inactive {
+    @apply text-text-secondary hover:bg-slate-100 hover:text-text-primary;
+  }
+
+  .tag-pill {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border border-primary/30 text-primary bg-primary/5;
+  }
 }
 
 /* Scrollbar styling */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
   background: #cbd5e1;
-  border-radius: 4px;
+  border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
+}
+
+/* Line clamp utility */
+.line-clamp-1 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+
+.line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }

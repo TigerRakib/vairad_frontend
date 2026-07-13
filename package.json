@@ -1,7 +1,7 @@
 {
-  "name": "vairadiology-frontend",
+  "name": "taskannotate",
   "version": "1.0.0",
-  "description": "Task Management and Image Annotation Web App",
+  "description": "TaskAnnotate - Task Management and Image Annotation",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

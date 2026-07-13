@@ -9,7 +9,10 @@ interface RootLayoutProps {
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
-      <body className="bg-gray-50">
+      <head>
+        <title>TaskAnnotate</title>
+      </head>
+      <body className="bg-[#F7F8FC]">
         {children}
         <ToasterProvider />
       </body>

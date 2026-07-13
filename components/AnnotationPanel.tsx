@@ -20,40 +20,38 @@ export function AnnotationPanel({
 }: AnnotationPanelProps) {
   if (annotations.length === 0) {
     return (
-      <div className="bg-white rounded-lg shadow-md p-6 text-center">
-        <p className="text-gray-600 text-sm">No annotations yet</p>
-        <p className="text-gray-500 text-xs mt-2">
-          Start drawing to add annotations
-        </p>
+      <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-6 text-center">
+        <p className="text-slate-500 text-sm">No annotations yet</p>
+        <p className="text-slate-400 text-xs mt-1">Start drawing to add annotations</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden">
-      <div className="px-4 py-3 border-b border-gray-200 bg-gray-50">
-        <h3 className="font-semibold text-gray-800">
+    <div className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
+      <div className="px-4 py-3 border-b border-slate-100 bg-slate-50">
+        <h3 className="font-semibold text-sm text-slate-800">
           Annotations ({annotations.length})
         </h3>
       </div>
-      <div className="divide-y max-h-96 overflow-y-auto">
+      <div className="divide-y divide-slate-100 max-h-96 overflow-y-auto">
         {annotations.map((annotation) => (
           <div
             key={annotation.id}
             onClick={() => onAnnotationSelect?.(annotation)}
             className={`p-3 cursor-pointer transition-colors ${
               selectedAnnotation?.id === annotation.id
-                ? 'bg-blue-50 border-l-4 border-blue-500'
-                : 'hover:bg-gray-50'
+                ? 'bg-indigo-50 border-l-4 border-indigo-500'
+                : 'hover:bg-slate-50'
             }`}
           >
             <div className="flex items-start justify-between">
-              <div className="flex-1">
-                <p className="font-medium text-gray-800 text-sm">
+              <div className="flex-1 min-w-0">
+                <p className="font-medium text-slate-800 text-sm truncate">
                   {annotation.label || `Polygon #${annotation.id}`}
                 </p>
-                <p className="text-xs text-gray-500 mt-1">
-                  Points: {annotation.points.length}
+                <p className="text-xs text-slate-400 mt-0.5">
+                  {annotation.points.length} points
                 </p>
               </div>
               {onAnnotationDelete && (
@@ -65,7 +63,7 @@ export function AnnotationPanel({
                     }
                   }}
                   disabled={isLoading}
-                  className="p-1 hover:bg-red-100 rounded text-red-600 transition-colors ml-2"
+                  className="p-1 hover:bg-red-100 rounded text-slate-400 hover:text-red-500 transition-colors ml-2 flex-shrink-0"
                   title="Delete annotation"
                 >
                   <TrashIcon className="w-4 h-4" />

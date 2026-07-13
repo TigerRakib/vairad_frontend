@@ -38,26 +38,24 @@ export function SaveAnnotationModal({
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold text-gray-800">
-            Save Annotation
-          </h2>
+          <h2 className="text-lg font-bold text-slate-800">Save Annotation</h2>
           <button
             onClick={onClose}
-            className="p-1 hover:bg-gray-100 rounded transition-colors"
+            className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors text-slate-400 hover:text-slate-600"
           >
-            <XMarkIcon className="w-6 h-6 text-gray-600" />
+            <XMarkIcon className="w-5 h-5" />
           </button>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="bg-blue-50 rounded-lg p-3 mb-4">
-            <p className="text-sm text-blue-800">
+          <div className="bg-indigo-50 rounded-lg p-3">
+            <p className="text-sm text-indigo-700">
               Polygon created with <span className="font-semibold">{points.length}</span> points
             </p>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-slate-700 mb-1.5">
               Annotation Label (optional)
             </label>
             <input
@@ -70,18 +68,18 @@ export function SaveAnnotationModal({
             />
           </div>
 
-          <div className="flex gap-3 pt-4">
+          <div className="flex gap-3 pt-4 border-t border-slate-100">
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 btn btn-secondary"
+              className="flex-1 btn btn-outline btn-small"
               disabled={isLoading}
             >
               Discard
             </button>
             <button
               type="submit"
-              className="flex-1 btn btn-primary"
+              className="flex-1 btn btn-primary btn-small"
               disabled={isLoading}
             >
               {isLoading ? 'Saving...' : 'Save Annotation'}

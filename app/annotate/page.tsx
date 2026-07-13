@@ -6,14 +6,15 @@ import toast from 'react-hot-toast';
 import { apiService } from '@/services/apiService';
 import { useAuthStore } from '@/store/authStore';
 import { useAnnotationStore } from '@/store/annotationStore';
-import { AnnotationImage, Point, PolygonAnnotation } from '@/types';
-import { Navigation } from '@/components/Navigation';
+import { PolygonAnnotation } from '@/types';
+import { Sidebar } from '@/components/Sidebar';
+import { TopNavbar } from '@/components/TopNavbar';
 import { ImageUploader } from '@/components/ImageUploader';
 import { ImageCarousel } from '@/components/ImageCarousel';
 import { AnnotationCanvas } from '@/components/AnnotationCanvas';
 import { AnnotationPanel } from '@/components/AnnotationPanel';
 import { SaveAnnotationModal } from '@/components/SaveAnnotationModal';
-import { SparklesIcon, StopIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { SparklesIcon, XMarkIcon } from '@heroicons/react/24/outline';
 
 export default function AnnotatePage() {
   const router = useRouter();
@@ -21,7 +22,6 @@ export default function AnnotatePage() {
   const {
     images,
     currentImageIndex,
-    annotations,
     isDrawing,
     currentPolygon,
     isLoading,
@@ -34,7 +34,6 @@ export default function AnnotatePage() {
     clearCurrentPolygon,
     addAnnotation,
     setLoading,
-    setError,
     getCurrentImage,
     getCurrentAnnotations,
     deleteAnnotation,
@@ -42,6 +41,7 @@ export default function AnnotatePage() {
 
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
   const [selectedAnnotation, setSelectedAnnotation] = useState<PolygonAnnotation>();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     if (!isAuthenticated()) {
@@ -49,7 +49,6 @@ export default function AnnotatePage() {
     }
   }, [isAuthenticated, router]);
 
-  // Load images on mount
   useEffect(() => {
     loadImages();
   }, []);
@@ -145,7 +144,7 @@ export default function AnnotatePage() {
   const handleCancelDrawing = () => {
     clearCurrentPolygon();
     setIsDrawing(false);
-    toast.info('Drawing cancelled');
+    toast('Drawing cancelled');
   };
 
   const handleUndoPoint = () => {
@@ -200,110 +199,105 @@ export default function AnnotatePage() {
   const currentAnnotations = getCurrentAnnotations();
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Navigation />
+    <div className="min-h-screen bg-surface-bg">
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-800">Image Annotation Tool</h1>
-          <p className="text-gray-600 mt-2">
-            Upload images and draw annotations to identify regions of interest
-          </p>
-        </div>
+      <main className="lg:ml-[260px]">
+        <TopNavbar
+          title="Annotation"
+          subtitle="Annotate images with polygon drawings"
+          onMenuToggle={() => setSidebarOpen(true)}
+        />
 
-        {images.length === 0 ? (
-          <div className="bg-white rounded-lg shadow-md p-8">
-            <ImageUploader onUpload={handleImageUpload} isLoading={isLoading} />
-          </div>
-        ) : (
-          <div className="space-y-8">
-            {/* Image Carousel */}
-            <ImageCarousel
-              images={images}
-              currentIndex={currentImageIndex}
-              onImageChange={handleImageChange}
-              onDelete={handleImageDelete}
-              isLoading={isLoading}
-            />
+        <div className="p-4 sm:p-6 lg:p-8">
+          {images.length === 0 ? (
+            <div className="bg-white rounded-card shadow-card border border-border p-6 sm:p-8">
+              <ImageUploader onUpload={handleImageUpload} isLoading={isLoading} />
+            </div>
+          ) : (
+            <div className="space-y-4 sm:space-y-6">
+              <ImageCarousel
+                images={images}
+                currentIndex={currentImageIndex}
+                onImageChange={handleImageChange}
+                onDelete={handleImageDelete}
+                isLoading={isLoading}
+              />
 
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-              {/* Canvas Area */}
-              <div className="lg:col-span-3 bg-white rounded-lg shadow-md p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-lg font-semibold text-gray-800">
-                    Draw Annotations
-                  </h2>
-                  <div className="flex gap-2">
-                    {!isDrawing ? (
-                      <button
-                        onClick={handleStartDrawing}
-                        disabled={!currentImage || isLoading}
-                        className="flex items-center gap-2 btn btn-primary"
-                      >
-                        <SparklesIcon className="w-5 h-5" />
-                        Start Drawing
-                      </button>
-                    ) : (
-                      <>
+              <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-6">
+                <div className="lg:col-span-3 bg-white rounded-card shadow-card border border-border p-4 sm:p-6">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
+                    <h2 className="text-lg font-semibold text-text-primary">Draw Annotations</h2>
+                    <div className="flex gap-2">
+                      {!isDrawing ? (
                         <button
-                          onClick={handleFinishDrawing}
-                          disabled={currentPolygon.length < 3 || isLoading}
-                          className="flex items-center gap-2 btn btn-primary"
+                          onClick={handleStartDrawing}
+                          disabled={!currentImage || isLoading}
+                          className="btn btn-primary btn-small"
                         >
-                          <SparklesIcon className="w-5 h-5" />
-                          Finish & Save
+                          <SparklesIcon className="w-4 h-4 mr-1.5" />
+                          Start Drawing
                         </button>
-                        <button
-                          onClick={handleCancelDrawing}
-                          disabled={isLoading}
-                          className="flex items-center gap-2 btn btn-danger"
-                        >
-                          <XMarkIcon className="w-5 h-5" />
-                          Cancel
-                        </button>
-                      </>
-                    )}
+                      ) : (
+                        <>
+                          <button
+                            onClick={handleFinishDrawing}
+                            disabled={currentPolygon.length < 3 || isLoading}
+                            className="btn btn-primary btn-small"
+                          >
+                            <SparklesIcon className="w-4 h-4 mr-1.5" />
+                            Finish & Save
+                          </button>
+                          <button
+                            onClick={handleCancelDrawing}
+                            disabled={isLoading}
+                            className="btn btn-danger btn-small"
+                          >
+                            <XMarkIcon className="w-4 h-4 mr-1.5" />
+                            Cancel
+                          </button>
+                        </>
+                      )}
+                    </div>
+                  </div>
+
+                  {currentImage ? (
+                    <AnnotationCanvas
+                      imageSrc={currentImage.image_url || currentImage.image}
+                      annotations={currentAnnotations}
+                      currentPolygon={currentPolygon}
+                      isDrawing={isDrawing}
+                      selectedAnnotation={selectedAnnotation}
+                      onPointAdd={addPointToPolygon}
+                      onPointUndo={handleUndoPoint}
+                      onAnnotationSelect={setSelectedAnnotation}
+                    />
+                  ) : (
+                    <div className="flex items-center justify-center h-64 sm:h-96 bg-surface-bg rounded-button border border-dashed border-border">
+                      <p className="text-text-secondary text-sm">No image available</p>
+                    </div>
+                  )}
+
+                  <div className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-border">
+                    <p className="text-sm text-text-secondary mb-4">Add more images</p>
+                    <ImageUploader onUpload={handleImageUpload} isLoading={isLoading} />
                   </div>
                 </div>
 
-                {currentImage ? (
-                  <AnnotationCanvas
-                    imageSrc={currentImage.image_url || currentImage.image}
+                <div className="lg:col-span-1">
+                  <AnnotationPanel
                     annotations={currentAnnotations}
-                    currentPolygon={currentPolygon}
-                    isDrawing={isDrawing}
                     selectedAnnotation={selectedAnnotation}
-                    onPointAdd={addPointToPolygon}
-                    onPointUndo={handleUndoPoint}
                     onAnnotationSelect={setSelectedAnnotation}
+                    onAnnotationDelete={handleDeleteAnnotation}
+                    isLoading={isLoading}
                   />
-                ) : (
-                  <div className="flex items-center justify-center h-96 bg-gray-100 rounded-lg">
-                    <p className="text-gray-600">No image available</p>
-                  </div>
-                )}
-
-                {/* Upload More */}
-                <div className="mt-6 pt-6 border-t border-gray-200">
-                  <p className="text-sm text-gray-600 mb-4">Add more images</p>
-                  <ImageUploader onUpload={handleImageUpload} isLoading={isLoading} />
                 </div>
-              </div>
-
-              {/* Annotations Panel */}
-              <div className="lg:col-span-1">
-                <AnnotationPanel
-                  annotations={currentAnnotations}
-                  selectedAnnotation={selectedAnnotation}
-                  onAnnotationSelect={setSelectedAnnotation}
-                  onAnnotationDelete={handleDeleteAnnotation}
-                  isLoading={isLoading}
-                />
               </div>
             </div>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      </main>
 
       <SaveAnnotationModal
         isOpen={isSaveModalOpen}

@@ -9,21 +9,26 @@ interface TaskModalProps {
   task?: Task;
   initialStatus?: TaskStatus;
   onClose: () => void;
-  onSave: (task: TaskCreateRequest) => void;
+  onSave: (task: any) => void;
   isLoading?: boolean;
 }
 
-interface TaskCreateRequest {
+interface TaskFormData {
   title: string;
-  description?: string;
+  description: string;
   priority: TaskPriority;
   status: TaskStatus;
   due_date: string;
-  tags?: string[];
+  tags: string[];
 }
 
-const priorities: TaskPriority[] = ['low', 'medium', 'high', 'urgent'];
-const statuses: TaskStatus[] = ['todo', 'in_progress', 'done'];
+const priorities: { value: TaskPriority; label: string }[] = [
+  { value: 'low', label: 'Low' },
+  { value: 'medium', label: 'Medium' },
+  { value: 'high', label: 'High' },
+];
+
+const availableTags = ['Backend', 'Frontend', 'API', 'React', 'UI', 'Design', 'Testing', 'Database'];
 
 export function TaskModal({
   isOpen,
@@ -33,7 +38,7 @@ export function TaskModal({
   onSave,
   isLoading,
 }: TaskModalProps) {
-  const [formData, setFormData] = useState<TaskCreateRequest>({
+  const [formData, setFormData] = useState<TaskFormData>({
     title: '',
     description: '',
     priority: 'medium',
@@ -41,8 +46,6 @@ export function TaskModal({
     due_date: new Date().toISOString().split('T')[0],
     tags: [],
   });
-
-  const [tagInput, setTagInput] = useState('');
 
   useEffect(() => {
     if (task) {
@@ -54,7 +57,6 @@ export function TaskModal({
         due_date: task.due_date,
         tags: task.tags || [],
       });
-      setTagInput('');
     } else {
       setFormData({
         title: '',
@@ -71,35 +73,21 @@ export function TaskModal({
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleAddTag = () => {
-    if (tagInput.trim()) {
-      setFormData((prev) => ({
-        ...prev,
-        tags: [...(prev.tags || []), tagInput.trim()],
-      }));
-      setTagInput('');
-    }
-  };
-
-  const handleRemoveTag = (index: number) => {
+  const toggleTag = (tag: string) => {
     setFormData((prev) => ({
       ...prev,
-      tags: (prev.tags || []).filter((_, i) => i !== index),
+      tags: prev.tags.includes(tag)
+        ? prev.tags.filter((t) => t !== tag)
+        : [...prev.tags, tag],
     }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.title.trim()) {
-      alert('Please enter a task title');
-      return;
-    }
+    if (!formData.title.trim()) return;
     onSave(formData);
   };
 
@@ -107,53 +95,47 @@ export function TaskModal({
 
   return (
     <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold text-gray-800">
-            {task ? 'Edit Task' : 'New Task'}
+      <div
+        className="bg-white rounded-modal shadow-2xl w-full max-h-[90vh] overflow-y-auto"
+        style={{ maxWidth: '640px' }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between px-6 py-5 border-b border-border">
+          <h2 className="text-lg font-bold text-text-primary">
+            {task ? 'Edit Task' : 'Add New Task'}
           </h2>
           <button
             onClick={onClose}
-            className="p-1 hover:bg-gray-100 rounded transition-colors"
+            className="p-1.5 hover:bg-slate-100 rounded-button transition-colors text-text-secondary hover:text-text-primary"
           >
-            <XMarkIcon className="w-6 h-6 text-gray-600" />
+            <XMarkIcon className="w-5 h-5" />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="p-6 space-y-5">
+          {/* Title */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Title *
+            <label className="block text-sm font-medium text-text-primary mb-1.5">
+              Title
             </label>
             <input
               type="text"
               name="title"
               value={formData.title}
               onChange={handleChange}
-              placeholder="Task title..."
+              placeholder="Enter task title..."
               className="input"
+              required
               disabled={isLoading}
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Description
-            </label>
-            <textarea
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-              placeholder="Task description..."
-              rows={3}
-              className="input resize-none"
-              disabled={isLoading}
-            />
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
+          {/* Priority + Due Date Grid */}
+          <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-text-primary mb-1.5">
                 Priority
               </label>
               <select
@@ -164,106 +146,86 @@ export function TaskModal({
                 disabled={isLoading}
               >
                 {priorities.map((p) => (
-                  <option key={p} value={p}>
-                    {p.charAt(0).toUpperCase() + p.slice(1)}
+                  <option key={p.value} value={p.value}>
+                    {p.label}
                   </option>
                 ))}
               </select>
             </div>
-
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Status
+              <label className="block text-sm font-medium text-text-primary mb-1.5">
+                Due Date
               </label>
-              <select
-                name="status"
-                value={formData.status}
+              <input
+                type="date"
+                name="due_date"
+                value={formData.due_date}
                 onChange={handleChange}
                 className="input"
                 disabled={isLoading}
-              >
-                {statuses.map((s) => (
-                  <option key={s} value={s}>
-                    {s === 'in_progress' ? 'In Progress' : s.charAt(0).toUpperCase() + s.slice(1)}
-                  </option>
-                ))}
-              </select>
+              />
             </div>
           </div>
 
+          {/* Tags */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Due Date
+            <label className="block text-sm font-medium text-text-primary mb-2">
+              Tags
             </label>
-            <input
-              type="date"
-              name="due_date"
-              value={formData.due_date}
+            <div className="flex flex-wrap gap-2">
+              {availableTags.map((tag) => {
+                const isActive = formData.tags.includes(tag);
+                return (
+                  <button
+                    key={tag}
+                    type="button"
+                    onClick={() => toggleTag(tag)}
+                    className={`px-3 py-1.5 text-xs font-medium rounded-full border transition-all duration-150 ${
+                      isActive
+                        ? 'bg-primary text-white border-primary'
+                        : 'bg-white text-text-secondary border-border hover:border-primary/30 hover:text-primary'
+                    }`}
+                    disabled={isLoading}
+                  >
+                    {tag}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Description */}
+          <div>
+            <label className="block text-sm font-medium text-text-primary mb-1.5">
+              Description
+            </label>
+            <textarea
+              name="description"
+              value={formData.description}
               onChange={handleChange}
-              className="input"
+              placeholder="Add a description..."
+              rows={4}
+              className="input resize-none"
               disabled={isLoading}
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Tags
-            </label>
-            <div className="flex gap-2">
-              <input
-                type="text"
-                value={tagInput}
-                onChange={(e) => setTagInput(e.target.value)}
-                placeholder="Add tag..."
-                className="input flex-1"
-                onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddTag())}
-                disabled={isLoading}
-              />
-              <button
-                type="button"
-                onClick={handleAddTag}
-                className="btn btn-secondary"
-                disabled={isLoading}
-              >
-                Add
-              </button>
-            </div>
-            {(formData.tags || []).length > 0 && (
-              <div className="flex flex-wrap gap-2 mt-2">
-                {formData.tags?.map((tag, index) => (
-                  <span
-                    key={index}
-                    className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-800 rounded text-sm"
-                  >
-                    {tag}
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveTag(index)}
-                      className="hover:text-blue-600"
-                    >
-                      ✕
-                    </button>
-                  </span>
-                ))}
-              </div>
-            )}
-          </div>
-
-          <div className="flex gap-3 pt-4">
+          {/* Footer */}
+          <div className="flex justify-end gap-3 pt-4 border-t border-border">
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 btn btn-secondary"
+              className="btn btn-outline btn-small"
               disabled={isLoading}
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="flex-1 btn btn-primary"
+              className="btn btn-primary btn-small"
               disabled={isLoading}
             >
-              {isLoading ? 'Saving...' : 'Save Task'}
+              {isLoading ? 'Saving...' : task ? 'Update Task' : 'Create Task'}
             </button>
           </div>
         </form>

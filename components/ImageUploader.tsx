@@ -57,17 +57,17 @@ export function ImageUploader({
       onDragLeave={handleDragLeave}
       onDragOver={handleDragOver}
       onDrop={handleDrop}
-      className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
+      className={`border-2 border-dashed rounded-xl p-8 text-center transition-all duration-200 ${
         isDragging
-          ? 'border-blue-500 bg-blue-50'
-          : 'border-gray-300 bg-gray-50 hover:border-gray-400'
+          ? 'border-indigo-500 bg-indigo-50'
+          : 'border-slate-200 bg-slate-50 hover:border-slate-300'
       }`}
     >
-      <CloudArrowUpIcon className="w-12 h-12 mx-auto text-gray-400 mb-4" />
-      <h3 className="text-lg font-medium text-gray-800 mb-2">
+      <CloudArrowUpIcon className="w-10 h-10 mx-auto text-slate-400 mb-3" />
+      <h3 className="text-sm font-semibold text-slate-700 mb-1">
         Drag and drop your images
       </h3>
-      <p className="text-sm text-gray-600 mb-4">
+      <p className="text-xs text-slate-400 mb-4">
         or click below to select files
       </p>
       <label>
@@ -78,11 +78,11 @@ export function ImageUploader({
           disabled={isLoading}
           className="hidden"
         />
-        <span className="inline-block btn btn-primary cursor-pointer">
+        <span className="inline-block btn btn-primary btn-small cursor-pointer">
           {isLoading ? 'Uploading...' : 'Select Image'}
         </span>
       </label>
-      <p className="text-xs text-gray-500 mt-4">
+      <p className="text-[11px] text-slate-400 mt-3">
         Supported formats: JPG, PNG, GIF, WebP (Max 10MB)
       </p>
     </div>

@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { format } from 'date-fns';
 import { Task, TaskStatus } from '@/types';
 
 interface TaskState {
@@ -43,13 +44,13 @@ export const useTaskStore = create<TaskState>((set, get) => ({
 
   getTasksByDate: (date) => {
     const { tasks } = get();
-    const dateStr = date.toISOString().split('T')[0];
+    const dateStr = format(date, 'yyyy-MM-dd');
     return tasks.filter((task) => task.due_date === dateStr);
   },
 
   getTasksByStatus: (status, date) => {
     const { tasks } = get();
-    const dateStr = date.toISOString().split('T')[0];
+    const dateStr = format(date, 'yyyy-MM-dd');
     return tasks.filter(
       (task) => task.status === status && task.due_date === dateStr
     );

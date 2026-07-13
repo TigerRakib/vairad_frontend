@@ -24,8 +24,7 @@ export function AnnotationCanvas({
   selectedAnnotation,
   onPointAdd,
   onPointUndo,
-  onAnnotationSelect,
-  drawingColor = 'rgb(59, 130, 246)',
+  drawingColor = 'rgb(93, 95, 239)',
 }: AnnotationCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imageRef = useRef<HTMLImageElement | null>(null);
@@ -79,15 +78,15 @@ export function AnnotationCanvas({
     // Draw existing annotations
     annotations.forEach((annotation) => {
       const isSelected = selectedAnnotation?.id === annotation.id;
-      const fillColor = isSelected ? 'rgba(59, 130, 246, 0.3)' : 'rgba(59, 130, 246, 0.1)';
-      const strokeColor = isSelected ? 'rgb(59, 130, 246)' : 'rgb(156, 163, 175)';
+      const fillColor = isSelected ? 'rgba(93, 95, 239, 0.3)' : 'rgba(93, 95, 239, 0.1)';
+      const strokeColor = isSelected ? 'rgb(93, 95, 239)' : 'rgb(148, 163, 184)';
       
       drawPolygon(ctx, annotation.points, annotation.label, fillColor, strokeColor);
     });
 
     // Draw current polygon being drawn
     if (currentPolygon.length > 0) {
-      drawPolygon(ctx, currentPolygon, '', 'rgba(34, 197, 94, 0.2)', drawingColor);
+      drawPolygon(ctx, currentPolygon, '', 'rgba(34, 197, 94, 0.15)', drawingColor);
 
       // Draw line from last point to mouse
       if (currentPolygon.length > 0) {

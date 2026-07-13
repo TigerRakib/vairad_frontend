@@ -49,7 +49,7 @@ export function Navigation() {
             <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center text-white">
               V
             </div>
-            <span className="hidden sm:inline text-gray-800">VaiRadiology</span>
+            <span className="hidden sm:inline text-gray-800">TaskAnnotate</span>
           </Link>
 
           {/* Desktop Menu */}

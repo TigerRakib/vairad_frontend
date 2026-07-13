@@ -4,7 +4,7 @@ export const TASK_STATUSES = ['todo', 'in_progress', 'done'] as const;
 export const TASK_PRIORITIES = ['low', 'medium', 'high', 'urgent'] as const;
 
 export const STATUS_LABELS: Record<string, string> = {
-  todo: 'To Do',
+  todo: 'Todo',
   in_progress: 'In Progress',
   done: 'Done',
 };
@@ -20,8 +20,8 @@ export const IMAGE_MAX_SIZE = 10 * 1024 * 1024; // 10MB
 export const SUPPORTED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
 
 export const DRAWING_COLORS = {
-  primary: 'rgb(59, 130, 246)',
-  success: 'rgb(16, 185, 129)',
+  primary: 'rgb(91, 92, 235)',
+  success: 'rgb(34, 197, 94)',
   warning: 'rgb(245, 158, 11)',
   danger: 'rgb(239, 68, 68)',
 };

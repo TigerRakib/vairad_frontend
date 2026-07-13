@@ -12,69 +12,53 @@ export default function HomePage() {
 
   useEffect(() => {
     if (isAuthenticated()) {
-      router.push('/tasks');
+      router.push('/dashboard');
     }
   }, [isAuthenticated, router]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center p-4">
+    <div className="min-h-screen flex items-center justify-center p-4"
+      style={{
+        background: 'linear-gradient(135deg, #5B5CEB 0%, #4949D4 50%, #7C3AED 100%)',
+      }}
+    >
       <div className="max-w-2xl w-full">
         <div className="text-center mb-12">
-          <div className="inline-block w-20 h-20 bg-white rounded-2xl flex items-center justify-center mb-6">
-            <span className="text-4xl font-bold bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
-              V
-            </span>
+          <div className="inline-block w-16 h-16 bg-white/15 rounded-card flex items-center justify-center mb-6 backdrop-blur-sm border border-white/20">
+            <span className="text-3xl font-bold text-white">V</span>
           </div>
-          <h1 className="text-5xl font-bold text-white mb-4">
-            VaiRadiology
+          <h1 className="text-5xl font-bold text-white mb-3 tracking-tight">
+            TaskAnnotate
           </h1>
-          <p className="text-xl text-blue-100">
+          <p className="text-lg text-white/70">
             Task Management & Image Annotation Platform
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-          {/* Task Management Card */}
-          <div className="bg-white rounded-2xl shadow-xl p-8 hover:shadow-2xl transition-shadow">
-            <CheckBadgeIcon className="w-12 h-12 text-blue-500 mb-4" />
-            <h2 className="text-2xl font-bold text-gray-800 mb-2">
-              Task Management
-            </h2>
-            <p className="text-gray-600 mb-4">
-              Organize your work with a Kanban board. Create, edit, and manage tasks by date with drag-and-drop support.
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-12">
+          <div className="bg-white rounded-card shadow-card p-7 hover:shadow-card-hover transition-shadow border border-white/20">
+            <CheckBadgeIcon className="w-10 h-10 text-primary mb-3" />
+            <h2 className="text-xl font-bold text-text-primary mb-2">Task Management</h2>
+            <p className="text-sm text-text-secondary mb-4">
+              Organize work with a Kanban board. Create, edit, and manage tasks with drag-and-drop.
             </p>
-            <ul className="space-y-2 text-sm text-gray-600 mb-6">
-              <li className="flex items-center gap-2">
-                <span className="text-blue-500">✓</span> Daily task organization
-              </li>
-              <li className="flex items-center gap-2">
-                <span className="text-blue-500">✓</span> Priority management
-              </li>
-              <li className="flex items-center gap-2">
-                <span className="text-blue-500">✓</span> Drag & drop interface
-              </li>
+            <ul className="space-y-1.5 text-sm text-text-primary">
+              <li className="flex items-center gap-2"><span className="text-primary font-bold">&#10003;</span> Daily task organization</li>
+              <li className="flex items-center gap-2"><span className="text-primary font-bold">&#10003;</span> Priority management</li>
+              <li className="flex items-center gap-2"><span className="text-primary font-bold">&#10003;</span> Drag & drop interface</li>
             </ul>
           </div>
 
-          {/* Image Annotation Card */}
-          <div className="bg-white rounded-2xl shadow-xl p-8 hover:shadow-2xl transition-shadow">
-            <PencilSquareIcon className="w-12 h-12 text-purple-500 mb-4" />
-            <h2 className="text-2xl font-bold text-gray-800 mb-2">
-              Image Annotation
-            </h2>
-            <p className="text-gray-600 mb-4">
-              Annotate images with polygon drawings. Label regions of interest and persist them to the database.
+          <div className="bg-white rounded-card shadow-card p-7 hover:shadow-card-hover transition-shadow border border-white/20">
+            <PencilSquareIcon className="w-10 h-10 text-primary mb-3" />
+            <h2 className="text-xl font-bold text-text-primary mb-2">Image Annotation</h2>
+            <p className="text-sm text-text-secondary mb-4">
+              Annotate images with polygon drawings. Label regions and persist annotations.
             </p>
-            <ul className="space-y-2 text-sm text-gray-600 mb-6">
-              <li className="flex items-center gap-2">
-                <span className="text-purple-500">✓</span> Polygon drawing tools
-              </li>
-              <li className="flex items-center gap-2">
-                <span className="text-purple-500">✓</span> Multi-image support
-              </li>
-              <li className="flex items-center gap-2">
-                <span className="text-purple-500">✓</span> Annotation management
-              </li>
+            <ul className="space-y-1.5 text-sm text-text-primary">
+              <li className="flex items-center gap-2"><span className="text-primary font-bold">&#10003;</span> Polygon drawing tools</li>
+              <li className="flex items-center gap-2"><span className="text-primary font-bold">&#10003;</span> Multi-image support</li>
+              <li className="flex items-center gap-2"><span className="text-primary font-bold">&#10003;</span> Annotation management</li>
             </ul>
           </div>
         </div>
@@ -82,24 +66,18 @@ export default function HomePage() {
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
             href="/login"
-            className="px-8 py-3 bg-white text-blue-600 font-semibold rounded-lg hover:bg-gray-100 transition-colors inline-flex items-center justify-center gap-2"
+            className="px-8 py-3 bg-white text-primary font-semibold rounded-button hover:bg-white/90 transition-colors inline-flex items-center justify-center gap-2 shadow-lg"
           >
             Login
             <ArrowRightIcon className="w-5 h-5" />
           </Link>
           <Link
             href="/signup"
-            className="px-8 py-3 bg-blue-700 text-white font-semibold rounded-lg hover:bg-blue-800 transition-colors inline-flex items-center justify-center gap-2"
+            className="px-8 py-3 bg-white/10 text-white font-semibold rounded-button hover:bg-white/20 transition-colors inline-flex items-center justify-center gap-2 border border-white/30"
           >
             Create Account
             <ArrowRightIcon className="w-5 h-5" />
           </Link>
-        </div>
-
-        <div className="mt-12 text-center text-blue-100">
-          <p className="text-sm">
-            Designed with ❤️ for efficient workflow management and radiology annotation
-          </p>
         </div>
       </div>
     </div>

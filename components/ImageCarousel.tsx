@@ -18,9 +18,7 @@ export function ImageCarousel({
   onDelete,
   isLoading,
 }: ImageCarouselProps) {
-  if (images.length === 0) {
-    return null;
-  }
+  if (images.length === 0) return null;
 
   const currentImage = images[currentIndex];
   const hasMultiple = images.length > 1;
@@ -34,15 +32,13 @@ export function ImageCarousel({
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-4">
+    <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-4">
       <div className="flex items-center justify-between mb-4">
         <div>
-          <p className="text-sm text-gray-600">
+          <p className="text-sm font-medium text-slate-700">
             Image {currentIndex + 1} of {images.length}
           </p>
-          <p className="text-xs text-gray-500 mt-1">
-            ID: {currentImage.id}
-          </p>
+          <p className="text-xs text-slate-400 mt-0.5">ID: {currentImage.id}</p>
         </div>
         {onDelete && (
           <button
@@ -52,7 +48,7 @@ export function ImageCarousel({
               }
             }}
             disabled={isLoading}
-            className="p-2 hover:bg-red-100 rounded text-red-600 transition-colors"
+            className="p-2 hover:bg-red-50 rounded-lg text-slate-400 hover:text-red-500 transition-colors"
             title="Delete image"
           >
             <TrashIcon className="w-5 h-5" />
@@ -65,21 +61,21 @@ export function ImageCarousel({
           <button
             onClick={handlePrevious}
             disabled={isLoading}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors disabled:opacity-50"
+            className="p-2 hover:bg-slate-100 rounded-lg transition-colors disabled:opacity-50"
           >
-            <ChevronLeftIcon className="w-6 h-6 text-gray-700" />
+            <ChevronLeftIcon className="w-5 h-5 text-slate-600" />
           </button>
 
-          <div className="flex gap-1 flex-wrap justify-center py-2">
+          <div className="flex gap-1.5 flex-wrap justify-center py-2">
             {images.slice(0, 5).map((img, idx) => (
               <button
                 key={img.id}
                 onClick={() => onImageChange(idx)}
                 disabled={isLoading}
-                className={`w-12 h-12 rounded-lg border-2 transition-all overflow-hidden ${
+                className={`w-11 h-11 rounded-lg border-2 transition-all overflow-hidden ${
                   currentIndex === idx
-                    ? 'border-blue-500 ring-2 ring-blue-300'
-                    : 'border-gray-300 hover:border-gray-400'
+                    ? 'border-indigo-500 ring-2 ring-indigo-200'
+                    : 'border-slate-200 hover:border-slate-300'
                 }`}
                 title={`Image ${idx + 1}`}
               >
@@ -91,7 +87,7 @@ export function ImageCarousel({
               </button>
             ))}
             {images.length > 5 && (
-              <div className="w-12 h-12 rounded-lg border-2 border-gray-300 flex items-center justify-center text-sm font-medium text-gray-600">
+              <div className="w-11 h-11 rounded-lg border-2 border-slate-200 flex items-center justify-center text-xs font-medium text-slate-500">
                 +{images.length - 5}
               </div>
             )}
@@ -100,9 +96,9 @@ export function ImageCarousel({
           <button
             onClick={handleNext}
             disabled={isLoading}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors disabled:opacity-50"
+            className="p-2 hover:bg-slate-100 rounded-lg transition-colors disabled:opacity-50"
           >
-            <ChevronRightIcon className="w-6 h-6 text-gray-700" />
+            <ChevronRightIcon className="w-5 h-5 text-slate-600" />
           </button>
         </div>
       )}

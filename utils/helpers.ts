@@ -37,12 +37,12 @@ export const isDatePast = (dateString: string): boolean => {
 
 export const getPriorityColor = (priority: string): string => {
   const colors: Record<string, string> = {
-    low: 'bg-green-100 text-green-800',
-    medium: 'bg-blue-100 text-blue-800',
-    high: 'bg-orange-100 text-orange-800',
-    urgent: 'bg-red-100 text-red-800',
+    low: 'bg-success/10 text-success',
+    medium: 'bg-warning/10 text-warning',
+    high: 'bg-danger/10 text-danger',
+    urgent: 'bg-danger/15 text-danger',
   };
-  return colors[priority] || 'bg-gray-100 text-gray-800';
+  return colors[priority] || 'bg-slate-100 text-text-secondary';
 };
 
 export const getPriorityValue = (priority: string): number => {
@@ -57,11 +57,11 @@ export const getPriorityValue = (priority: string): number => {
 
 export const getStatusColor = (status: string): string => {
   const colors: Record<string, string> = {
-    todo: 'bg-gray-100 text-gray-800',
-    in_progress: 'bg-blue-100 text-blue-800',
-    done: 'bg-green-100 text-green-800',
+    todo: 'bg-slate-100 text-text-primary',
+    in_progress: 'bg-warning/10 text-warning',
+    done: 'bg-success/10 text-success',
   };
-  return colors[status] || 'bg-gray-100 text-gray-800';
+  return colors[status] || 'bg-slate-100 text-text-secondary';
 };
 
 export const calculateCanvasPoint = (
@@ -82,8 +82,8 @@ export const drawPolygon = (
   ctx: CanvasRenderingContext2D,
   points: { x: number; y: number }[],
   label?: string,
-  fillColor = 'rgba(59, 130, 246, 0.2)',
-  strokeColor = 'rgb(59, 130, 246)'
+  fillColor = 'rgba(91, 92, 235, 0.2)',
+  strokeColor = 'rgb(91, 92, 235)'
 ): void => {
   if (points.length === 0) return;
 
@@ -102,7 +102,6 @@ export const drawPolygon = (
   ctx.fill();
   ctx.stroke();
 
-  // Draw points
   points.forEach((point) => {
     ctx.fillStyle = strokeColor;
     ctx.beginPath();
@@ -110,11 +109,10 @@ export const drawPolygon = (
     ctx.fill();
   });
 
-  // Draw label
   if (label && points.length > 0) {
     const firstPoint = points[0];
-    ctx.fillStyle = 'black';
-    ctx.font = '12px Arial';
+    ctx.fillStyle = '#1F2937';
+    ctx.font = '12px Inter, sans-serif';
     ctx.fillText(label, firstPoint.x + 10, firstPoint.y - 10);
   }
 };

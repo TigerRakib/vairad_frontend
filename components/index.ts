@@ -1,9 +1,12 @@
 export { Navigation } from './Navigation';
+export { Sidebar } from './Sidebar';
+export { TopNavbar } from './TopNavbar';
 export { DateSelector } from './DateSelector';
 export { Board } from './Board';
 export { Column } from './Column';
 export { TaskCard } from './TaskCard';
 export { TaskModal } from './TaskModal';
+export { TaskDetailsModal } from './TaskDetailsModal';
 export { AnnotationCanvas } from './AnnotationCanvas';
 export { ImageCarousel } from './ImageCarousel';
 export { ImageUploader } from './ImageUploader';
