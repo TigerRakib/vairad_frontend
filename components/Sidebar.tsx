@@ -69,7 +69,7 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
         `}
       >
         {/* Logo */}
-        <div className="px-3 h-[72px] flex items-center gap-3">
+        <div className="px-4 h-[72px] flex items-center gap-3">
           <div className="w-9 h-9 bg-primary rounded-xl flex items-center justify-center shadow-sm">
             <span className="text-white font-bold text-sm">V</span>
           </div>

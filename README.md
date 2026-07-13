@@ -210,7 +210,7 @@ DELETE /polygon-annotations/{id}/
 
 ## 🚀 Deployment
 
-### Deploy to Vercel (Recommended)
+### Deploy to Vercel
 
 1. Push code to GitHub
 2. Connect repository to Vercel

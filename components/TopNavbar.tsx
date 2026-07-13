@@ -62,10 +62,10 @@ export function TopNavbar({ title, subtitle, onMenuToggle }: TopNavbarProps) {
             <Bars3Icon className="w-5 h-5" />
           </button>
         )}
-        <div>
+        <div className="relative">
           <h1 className="text-lg font-bold text-text-primary">{title}</h1>
           {subtitle && (
-            <p className="text-sm text-text-secondary hidden sm:block">{subtitle}</p>
+            <p className="text-sm text-text-secondary hidden sm:block absolute top-full left-0 whitespace-nowrap">{subtitle}</p>
           )}
         </div>
       </div>

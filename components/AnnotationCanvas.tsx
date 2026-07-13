@@ -34,7 +34,6 @@ export function AnnotationCanvas({
   useEffect(() => {
     const img = new Image();
     img.crossOrigin = 'anonymous';
-    img.src = imageSrc;
     img.onload = () => {
       const maxWidth = 1200;
       const maxHeight = 800;
@@ -54,6 +53,10 @@ export function AnnotationCanvas({
       imageRef.current = img;
       redrawCanvas(img, width, height);
     };
+    img.onerror = () => {
+      imageRef.current = null;
+    };
+    img.src = imageSrc;
   }, [imageSrc]);
 
   // Redraw canvas when annotations or polygon changes
@@ -64,7 +67,7 @@ export function AnnotationCanvas({
 
   const redrawCanvas = (img: HTMLImageElement, width: number, height: number) => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas || !img || !img.complete || img.naturalWidth === 0) return;
 
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
@@ -124,11 +127,11 @@ export function AnnotationCanvas({
   };
 
   const handleCanvasMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
-    if (!isDrawing || currentPolygon.length === 0) return;
+    if (!isDrawing || currentPolygon.length === 0 || !imageRef.current) return;
 
     const point = calculateCanvasPoint(e, canvasRef.current!);
     // Update visual feedback with mouse position
-    redrawCanvas(imageRef.current!, canvasSize.width, canvasSize.height);
+    redrawCanvas(imageRef.current, canvasSize.width, canvasSize.height);
 
     const canvas = canvasRef.current;
     if (!canvas) return;
