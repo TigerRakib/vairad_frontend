@@ -41,7 +41,7 @@ A modern, responsive React/Next.js web application for task management and image
 
 - **Node.js**: v18.0.0 or higher
 - **npm**: v9.0.0 or higher
-- **Backend**: Django API running on `http://127.0.0.1:8000/api`
+- **Backend**: Django API deployed on `https://vai-rad-backend.onrender.com/api`
 
 ## 🚀 Installation
 
@@ -59,7 +59,7 @@ npm install
 ### 3. Configure Environment Variables
 Create a `.env.local` file in the root directory:
 ```env
-NEXT_PUBLIC_API_URL=http://127.0.0.1:8000/api
+NEXT_PUBLIC_API_URL=https://vai-rad-backend.onrender.com/api
 ```
 
 ### 4. Run Development Server
@@ -87,18 +87,31 @@ vairadiology_frontend/
 │   │   └── page.tsx       # Login page
 │   ├── signup/
 │   │   └── page.tsx       # Signup page
+│   ├── dashboard/
+│   │   └── page.tsx       # Dashboard overview
 │   ├── tasks/
-│   │   └── page.tsx       # Task management page
-│   └── annotate/
-│       └── page.tsx       # Image annotation page
+│   │   └── page.tsx       # Task management (Kanban board)
+│   ├── annotate/
+│   │   └── page.tsx       # Image annotation page
+│   ├── calendar/
+│   │   └── page.tsx       # Calendar view
+│   ├── reports/
+│   │   └── page.tsx       # Analytics & reports
+│   ├── settings/
+│   │   └── page.tsx       # Account settings
+│   └── help/
+│       └── page.tsx       # FAQ & help
 ├── components/             # Reusable React components
-│   ├── Navigation.tsx      # App navigation header
-│   ├── DateSelector.tsx    # Date picker for tasks
+│   ├── Sidebar.tsx        # App sidebar navigation
+│   ├── TopNavbar.tsx      # Top navigation bar
+│   ├── Navigation.tsx     # Legacy navigation (unused)
+│   ├── DateSelector.tsx   # Date picker for tasks
 │   ├── Board.tsx          # Kanban board container
 │   ├── Column.tsx         # Task column component
 │   ├── TaskCard.tsx       # Individual task card
 │   ├── TaskModal.tsx      # Modal for creating/editing tasks
-│   ├── AnnotationCanvas.tsx  # Canvas for drawing annotations
+│   ├── TaskDetailsModal.tsx # Modal for viewing task details
+│   ├── AnnotationCanvas.tsx # Canvas for drawing annotations
 │   ├── ImageCarousel.tsx  # Image slider component
 │   ├── ImageUploader.tsx  # File upload component
 │   ├── AnnotationPanel.tsx # Annotation list sidebar
@@ -171,21 +184,27 @@ All API calls are handled through the `apiService` in `/services/apiService.ts`:
 
 ### API Endpoints Used
 ```
-POST   /auth/signup/
-POST   /auth/login/
-POST   /auth/logout/
-GET    /auth/user/
-GET    /tasks/
-POST   /tasks/
-GET    /tasks/{id}/
-PATCH  /tasks/{id}/
-DELETE /tasks/{id}/
-GET    /annotation-images/
-POST   /annotation-images/
-DELETE /annotation-images/{id}/
-GET    /polygon-annotations/
-POST   /polygon-annotations/
-DELETE /polygon-annotations/{id}/
+POST   /api/auth/signup/          # Register new user
+POST   /api/auth/login/           # Login, get token
+POST   /api/auth/logout/          # Delete token
+GET    /api/auth/user/            # Get current user
+
+GET    /api/tasks/                # List tasks (paginated, filterable)
+POST   /api/tasks/                # Create task
+GET    /api/tasks/{id}/           # Get task
+PATCH  /api/tasks/{id}/           # Update task
+DELETE /api/tasks/{id}/           # Delete task
+
+GET    /api/annotation-images/    # List images (paginated)
+POST   /api/annotation-images/    # Upload image (multipart)
+GET    /api/annotation-images/{id}/ # Get image
+DELETE /api/annotation-images/{id}/ # Delete image + file
+
+GET    /api/polygon-annotations/     # List polygons (paginated)
+POST   /api/polygon-annotations/     # Create polygon
+GET    /api/polygon-annotations/{id}/ # Get polygon
+PATCH  /api/polygon-annotations/{id}/ # Update polygon
+DELETE /api/polygon-annotations/{id}/ # Delete polygon
 ```
 
 ## 🐛 Troubleshooting
@@ -193,8 +212,9 @@ DELETE /polygon-annotations/{id}/
 ### Common Issues
 
 **Issue**: API calls fail with "Network Error"
-- **Solution**: Ensure Django backend is running on `http://127.0.0.1:8000`
+- **Solution**: Ensure backend is reachable at `https://vai-rad-backend.onrender.com`
 - Check `NEXT_PUBLIC_API_URL` in `.env.local`
+- Verify CORS is configured on the backend for your frontend domain
 
 **Issue**: Automatic logout happening frequently
 - **Solution**: Check backend token expiration settings
@@ -216,7 +236,7 @@ DELETE /polygon-annotations/{id}/
 2. Connect repository to Vercel
 3. Set environment variables in Vercel dashboard:
    ```
-   NEXT_PUBLIC_API_URL=<backend-url>
+   NEXT_PUBLIC_API_URL=https://vai-rad-backend.onrender.com/api
    ```
 4. Deploy with `npm run build`
 

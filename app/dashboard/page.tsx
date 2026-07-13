@@ -15,7 +15,6 @@ import {
   CheckCircleIcon,
   ArrowUpIcon,
   ArrowRightIcon,
-  PencilSquareIcon,
   CalendarDaysIcon,
 } from '@heroicons/react/24/outline';
 
@@ -46,25 +45,31 @@ export default function DashboardPage() {
         apiService.getAnnotationImages(),
         apiService.getPolygonAnnotations(),
       ]);
-      setTasks(tasksRes.results || tasksRes);
+      const rawTasks = tasksRes.results || tasksRes;
+      const normalized = rawTasks.map((t: any) => ({
+        ...t,
+        status: t.status?.toLowerCase(),
+        priority: t.priority?.toLowerCase(),
+      }));
+      setTasks(normalized);
       setImages(imagesRes.results || imagesRes);
       setAnnotations(annotationsRes.results || annotationsRes);
     } catch {
     }
   };
 
-  const todoTasks = tasks.filter((t) => t.status === 'TODO');
-  const inProgressTasks = tasks.filter((t) => t.status === 'IN_PROGRESS');
-  const doneTasks = tasks.filter((t) => t.status === 'DONE');
+  const todoTasks = tasks.filter((t) => t.status === 'todo');
+  const inProgressTasks = tasks.filter((t) => t.status === 'in_progress');
+  const doneTasks = tasks.filter((t) => t.status === 'done');
 
-  const highPriority = tasks.filter((t) => t.priority === 'HIGH');
-  const mediumPriority = tasks.filter((t) => t.priority === 'MEDIUM');
-  const lowPriority = tasks.filter((t) => t.priority === 'LOW');
+  const highPriority = tasks.filter((t) => t.priority === 'high');
+  const mediumPriority = tasks.filter((t) => t.priority === 'medium');
+  const lowPriority = tasks.filter((t) => t.priority === 'low');
 
   const today = format(new Date(), 'yyyy-MM-dd');
   const weekEnd = format(addDays(new Date(), 7), 'yyyy-MM-dd');
   const upcomingTasks = tasks
-    .filter((t) => t.due_date >= today && t.due_date <= weekEnd && t.status !== 'DONE')
+    .filter((t) => t.due_date >= today && t.due_date <= weekEnd && t.status !== 'done')
     .sort((a, b) => a.due_date.localeCompare(b.due_date));
 
   const recentTasks = [...tasks]
@@ -278,9 +283,9 @@ export default function DashboardPage() {
                     >
                       <div
                         className={`w-2 h-2 rounded-full flex-shrink-0 ${
-                          task.priority === 'HIGH'
+                          task.priority === 'high'
                             ? 'bg-danger'
-                            : task.priority === 'MEDIUM'
+                            : task.priority === 'medium'
                             ? 'bg-warning'
                             : 'bg-success'
                         }`}
@@ -293,12 +298,12 @@ export default function DashboardPage() {
                       </div>
                       <span
                         className={`badge text-[10px] ${
-                          task.status === 'TODO'
+                          task.status === 'todo'
                             ? 'bg-primary-50 text-primary'
                             : 'bg-warning/10 text-warning'
                         }`}
                       >
-                        {task.status === 'TODO' ? 'To Do' : 'In Progress'}
+                        {task.status === 'todo' ? 'To Do' : 'In Progress'}
                       </span>
                     </div>
                   ))}
@@ -359,16 +364,16 @@ export default function DashboardPage() {
                         <td className="py-3 pr-4">
                           <span
                             className={`badge ${
-                              task.status === 'DONE'
+                              task.status === 'done'
                                 ? 'bg-success/10 text-success'
-                                : task.status === 'IN_PROGRESS'
+                                : task.status === 'in_progress'
                                 ? 'bg-warning/10 text-warning'
                                 : 'bg-primary-50 text-primary'
                             }`}
                           >
-                            {task.status === 'TODO'
+                            {task.status === 'todo'
                               ? 'To Do'
-                              : task.status === 'IN_PROGRESS'
+                              : task.status === 'in_progress'
                               ? 'In Progress'
                               : 'Done'}
                           </span>
@@ -376,9 +381,9 @@ export default function DashboardPage() {
                         <td className="py-3 pr-4">
                           <span
                             className={`badge ${
-                              task.priority === 'HIGH'
+                              task.priority === 'high'
                                 ? 'bg-danger/10 text-danger'
-                                : task.priority === 'MEDIUM'
+                                : task.priority === 'medium'
                                 ? 'bg-warning/10 text-warning'
                                 : 'bg-success/10 text-success'
                             }`}

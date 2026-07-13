@@ -3,7 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   images: {
-    domains: ['localhost', '127.0.0.1'],
+    domains: ['localhost', '127.0.0.1', 'vai-rad-backend.onrender.com'],
     unoptimized: true,
   },
   compiler: {
@@ -13,11 +13,11 @@ const nextConfig = {
     return [
       {
         source: '/api/:path*',
-        destination: 'http://127.0.0.1:8000/api/:path*',
+        destination: 'https://vai-rad-backend.onrender.com/api/:path*',
       },
       {
         source: '/media/:path*',
-        destination: 'http://127.0.0.1:8000/media/:path*',
+        destination: 'https://vai-rad-backend.onrender.com/media/:path*',
       },
     ];
   },

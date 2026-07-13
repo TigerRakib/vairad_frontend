@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { format, subDays, startOfWeek, addDays, isSameDay } from 'date-fns';
+import { format, startOfWeek, addDays } from 'date-fns';
 import { apiService } from '@/services/apiService';
 import { useAuthStore } from '@/store/authStore';
 import { Sidebar } from '@/components/Sidebar';
@@ -12,9 +12,7 @@ import {
   ChartBarIcon,
   CheckCircleIcon,
   ClockIcon,
-  ArrowUpIcon,
   PencilSquareIcon,
-  ArrowRightIcon,
   ArrowDownTrayIcon,
 } from '@heroicons/react/24/outline';
 
@@ -52,12 +50,12 @@ export default function ReportsPage() {
   };
 
   const total = tasks.length;
-  const done = tasks.filter((t) => t.status === 'DONE').length;
+  const done = tasks.filter((t) => t.status === 'done').length;
   const completionRate = total ? Math.round((done / total) * 100) : 0;
 
-  const high = tasks.filter((t) => t.priority === 'HIGH').length;
-  const medium = tasks.filter((t) => t.priority === 'MEDIUM').length;
-  const low = tasks.filter((t) => t.priority === 'LOW').length;
+  const high = tasks.filter((t) => t.priority === 'high').length;
+  const medium = tasks.filter((t) => t.priority === 'medium').length;
+  const low = tasks.filter((t) => t.priority === 'low').length;
 
   const today = new Date();
   const weekStart = startOfWeek(today, { weekStartsOn: 1 });
@@ -68,7 +66,7 @@ export default function ReportsPage() {
       label: format(day, 'EEE'),
       shortLabel: format(day, 'EEE'),
       count: tasks.filter(
-        (t) => t.status === 'DONE' && t.updated_at?.startsWith(dateStr)
+        (t) => t.status === 'done' && t.updated_at?.startsWith(dateStr)
       ).length,
     };
   });
@@ -112,9 +110,9 @@ export default function ReportsPage() {
   const downloadPDF = () => {
     const w = window.open('', '_blank');
     if (!w) return;
-    const doneCount = tasks.filter((t) => t.status === 'DONE').length;
-    const inProgressCount = tasks.filter((t) => t.status === 'IN_PROGRESS').length;
-    const todoCount = tasks.filter((t) => t.status === 'TODO').length;
+    const doneCount = tasks.filter((t) => t.status === 'done').length;
+    const inProgressCount = tasks.filter((t) => t.status === 'in_progress').length;
+    const todoCount = tasks.filter((t) => t.status === 'todo').length;
 
     w.document.write(`
       <html><head><title>Task Report</title>
@@ -151,7 +149,7 @@ export default function ReportsPage() {
         <tbody>
           ${tasks.map((t) => `<tr>
             <td>${t.title}</td>
-            <td><span class="badge badge-${t.status === 'DONE' ? 'done' : t.status === 'IN_PROGRESS' ? 'progress' : 'todo'}">${t.status === 'TODO' ? 'To Do' : t.status === 'IN_PROGRESS' ? 'In Progress' : 'Done'}</span></td>
+            <td><span class="badge badge-${t.status === 'done' ? 'done' : t.status === 'in_progress' ? 'progress' : 'todo'}">${t.status === 'todo' ? 'To Do' : t.status === 'in_progress' ? 'In Progress' : 'Done'}</span></td>
             <td><span class="badge badge-${t.priority.toLowerCase()}">${t.priority}</span></td>
             <td>${t.due_date}</td>
             <td>${(t.tags || []).join(', ')}</td>
@@ -218,7 +216,7 @@ export default function ReportsPage() {
                 <p className="text-sm text-text-secondary">In Progress</p>
               </div>
               <p className="text-3xl font-bold text-text-primary">
-                {tasks.filter((t) => t.status === 'IN_PROGRESS').length}
+                {tasks.filter((t) => t.status === 'in_progress').length}
               </p>
             </div>
 
@@ -269,13 +267,13 @@ export default function ReportsPage() {
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-text-secondary">In Progress</span>
                     <span className="text-sm font-semibold text-warning">
-                      {tasks.filter((t) => t.status === 'IN_PROGRESS').length}
+                      {tasks.filter((t) => t.status === 'in_progress').length}
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-text-secondary">To Do</span>
                     <span className="text-sm font-semibold text-primary">
-                      {tasks.filter((t) => t.status === 'TODO').length}
+                      {tasks.filter((t) => t.status === 'todo').length}
                     </span>
                   </div>
                 </div>

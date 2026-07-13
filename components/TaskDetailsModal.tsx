@@ -30,10 +30,10 @@ const priorityConfig: Record<string, { label: string; className: string }> = {
   urgent: { label: 'Urgent', className: 'text-danger bg-danger/15' },
 };
 
-export function TaskDetailsModal({ task, onClose, onDelete, onEdit }: TaskDetailsModalProps) {
+export function TaskDetailsModal({ task, onClose, onDelete }: TaskDetailsModalProps) {
+  const { user } = useAuthStore();
   if (!task) return null;
 
-  const { user } = useAuthStore();
   const status = statusConfig[task.status] || statusConfig.todo;
   const priority = priorityConfig[task.priority] || priorityConfig.medium;
 
